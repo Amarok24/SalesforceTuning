@@ -4,7 +4,7 @@
 // @version      0.13
 // @description  Small improvements to Salesforce.
 // @author       Amarok24
-// @include      https://monster.my.salesforce.com/*
+// @include      https://*.my.salesforce.com/*
 // @run-at       document-idle
 // @grant        none
 // Author: https://github.com/Amarok24
