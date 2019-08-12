@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name         Salesforce Tuning
+// @name         Salesforce Lightning Tuning
 // @namespace    http://tampermonkey.net/
-// @version      0.13
+// @version      0.15
 // @description  Small improvements to Salesforce.
 // @author       Amarok24
-// @include      https://*.my.salesforce.com/*
+// @include      https://monster.lightning.force.com/*
 // @run-at       document-idle
 // @grant        none
 // Author: https://github.com/Amarok24
@@ -13,61 +13,34 @@
 (function () {
     "use strict";
 
+    function selectCases() {
+        var casesSelection = document.getElementById("input-7-2-7");
 
-    function letsDoIt() {
-        //var i;
-
-        var fileList = document.querySelector(".eWidgetBody");
-        fileList.style.height = "auto";
-
-        var lowerMainSection = document.querySelector(".entityFeedLayout .lowerMainSection");
-        lowerMainSection.style.width = "1000px";
-
-        var rightContent = document.querySelector(".entityFeedLayout .rightContent");
-        rightContent.style.width = "280px";
-        rightContent.style.border = "1px solid orange";
-        rightContent.style.padding = "15px 5px 5px 5px";
-
-        var centerContent = document.querySelector(".entityFeedLayout .centerContent");
-        centerContent.style.width = "680px";
-
-        var feedcontainer = document.querySelector(".feedcontainer");
-        feedcontainer.style.maxWidth = "700px";
-
-        var showAllButton = document.querySelectorAll(".eFilesWidgetContainer .optionLabel");
-        if (showAllButton.length) {
-            showAllButton[0].style.backgroundColor = "orange"; // Show Recent - bgrcolor
-            showAllButton[0].style.padding = "5px 10px";
-            showAllButton[1].click(); // Show All - click
+        if (casesSelection) {
+            casesSelection.click(); // select "Cases" from drop-down menu
+            console.info('SF Lightning Tuning says: "Cases" should be selected now');
+        } else {
+         // drop-down list does not exist yet (gets dynamically created when first clicking at menu)
+            console.info('SF Lightning Tuning says: drop-down menu does not exist, clicking to create it...');
+            document.getElementById("dropdown-element-7").click();
+            window.setTimeout(myFocus, 300);
         }
-        /*
-            for (i = 0; i < showAllButton.length; i++) {
-                showAllButton[i].style.backgroundColor = "orange";
-                showAllButton[i].style.padding = "5px";
-            }
-        */
-
     }
 
-    function checkIfFileListExists() {
-        if (document.querySelector(".eWidgetBody")) {
-            console.info("SalesforceTuning INFO:  .eWidgetBody (fileList) exists! Making changes now and clearing intervalID...");
-            letsDoIt();
-        } else {
-            console.info("SalesforceTuning WARNING:  .eWidgetBody (fileList) currently not available");
-        }
+    function focusSearch() {
+        document.getElementsByClassName("uiInputTextForAutocomplete")[0].focus(); // focus and click on search field
+        document.getElementsByClassName("uiInputTextForAutocomplete")[0].click();
     }
 
     function myFocus(ev) {
-        console.info('SalesforceTuning says: window got focus, focusing search box now');
-        document.getElementById("phSearchInput").focus();
+        console.info('SF Lightning Tuning says: window got focus, selecting Cases and focusing search field...');
+        //window.setTimeout(selectCases, 200);
+        selectCases();
+        window.setTimeout(focusSearch, 50);
     }
 
+    console.log("SF Lightning Tuning userscript started");
     window.addEventListener("focus", myFocus);
     myFocus();
-
-    console.log("SalesforceTuning userscript started");
-
-    checkIfFileListExists();
 
 })();
